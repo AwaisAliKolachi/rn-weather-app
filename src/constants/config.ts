@@ -1,0 +1,15 @@
+import {
+  ENV,
+  OPEN_WEATHER_API_URL,
+  OPEN_WEATHER_API_KEY,
+  WEATHER_API_URL,
+  WEATHER_API_KEY,
+} from '@env';
+
+export const AppConfig = {
+  ENV,
+  OPEN_WEATHER_API_URL,
+  OPEN_WEATHER_API_KEY,
+  WEATHER_API_URL,
+  WEATHER_API_KEY,
+};
