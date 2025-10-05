@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  FlatList,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from 'react-native';
+import { FlatList, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from '@app/blueprints';
 import useHome from './useHome';
 import { scaled } from '@src/utils';

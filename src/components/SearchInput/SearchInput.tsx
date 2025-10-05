@@ -157,7 +157,15 @@ const SearchInputStyles = ({
       borderColor: borderColor,
       borderRadius: 16,
       zIndex: 999,
-      maxHeight: 280,
+      maxHeight: 300,
+      shadowColor: textColor,
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.3,
+      shadowRadius: 4.65,
+      elevation: 8,
     },
     item: {
       paddingVertical: 10,
