@@ -38,8 +38,8 @@ A **React Native** app that provides **current weather** and a **7-day forecast*
 
   - Caches last fetched weather data for offline viewing
 
-- 🎬 **Animations (Pending, To-Do)** ❌
-  - Add weather-based transitions, smooth screen fade-ins, and dynamic icon animations.
+- 🎬 **Animations** ✅
+  - Added weather-based transitions, smooth screen fade-ins, and dynamic icon animations.
 
 ---
 

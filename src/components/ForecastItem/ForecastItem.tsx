@@ -14,6 +14,14 @@ interface ForecastItemProps {
 
 export const ForecastItem: React.FC<ForecastItemProps> = ({ item, color }) => {
   const styles = ForecastItemStyles(color);
+  const formatTemp = (temp: number) => {
+    const [intPart, decPart] = temp.toFixed(1).split('.');
+    const padded =
+      intPart?.length === 1
+        ? `  ${intPart}.${decPart}`
+        : `${intPart}.${decPart}`;
+    return `${padded} °C`;
+  };
   return (
     <View
       style={[
@@ -40,11 +48,11 @@ export const ForecastItem: React.FC<ForecastItemProps> = ({ item, color }) => {
       <View style={styles.forecastTemp}>
         <View style={styles.forecastTempRow}>
           <Icon icon={Icons.TEMP_MAX_ICONS} style={styles.forecastTempIcon} />
-          <Text preset="h5">{item.day.maxtemp_c.toFixed(1)} °C</Text>
+          <Text preset="h5">{formatTemp(item.day.maxtemp_c)}</Text>
         </View>
         <View style={styles.forecastTempRow}>
           <Icon icon={Icons.TEMP_MIN_ICONS} style={styles.forecastTempIcon} />
-          <Text preset="h5">{item.day.mintemp_c.toFixed(1)} °C</Text>
+          <Text preset="h5">{formatTemp(item.day.mintemp_c)}</Text>
         </View>
       </View>
     </View>

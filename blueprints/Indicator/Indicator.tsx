@@ -5,12 +5,8 @@ import React, {
   useState,
 } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
-
 import { useColor } from '@src/context';
 import { Palette, scaledSize } from '@src/utils';
-
-import { Text } from '../Text/Text';
-
 export interface IndicatorProps {
   isLoading: boolean;
 }
@@ -71,12 +67,12 @@ export const IndicatorView = React.forwardRef<IndicatorRef, IndicatorProps>(
   IndicatorViewRef
 );
 
-export const indicatorStyles = ({ overlay, textColor }: Palette) => {
+export const indicatorStyles = ({ textColor }: Palette) => {
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
       justifyContent: 'flex-start',
-      backgroundColor: overlay,
+      backgroundColor: 'transparent',
       ...StyleSheet.absoluteFillObject,
     },
     loaderContainer: {

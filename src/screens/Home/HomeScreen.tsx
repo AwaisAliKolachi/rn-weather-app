@@ -15,6 +15,11 @@ import {
   SearchInput,
   SvgIcon,
 } from '@src/components';
+import Animated, {
+  FadeInDown,
+  FadeInRight,
+  FadeInUp,
+} from 'react-native-reanimated';
 
 const HomeScreen = () => {
   const {
@@ -37,11 +42,30 @@ const HomeScreen = () => {
       appTheme,
       weatherData?.weather?.[0]?.icon ?? ''
     );
-    return iconName ? <SvgIcon icon={iconName} {...scaled(size)} /> : null;
+    return iconName ? (
+      <Animated.View
+        key={iconName}
+        entering={FadeInDown.duration(400).delay(500).springify().mass(0.6)}>
+        <SvgIcon icon={iconName} {...scaled(size)} />
+      </Animated.View>
+    ) : null;
   };
 
-  const renderForecastItem = ({ item }: { item: ForecastDayItem }) => (
-    <ForecastItem item={item} color={color} />
+  const renderForecastItem = ({
+    item,
+    index,
+  }: {
+    item: ForecastDayItem;
+    index: number;
+  }) => (
+    <Animated.View
+      key={item.date}
+      entering={FadeInUp.duration(500)
+        .delay(index * 180)
+        .springify()
+        .mass(0.6)}>
+      <ForecastItem item={item} color={color} />
+    </Animated.View>
   );
 
   return (
@@ -59,7 +83,10 @@ const HomeScreen = () => {
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <View style={styles.topSection}>
+          <Animated.View
+            key={`${forecastData?.location?.name}-${weatherData?.dt}`}
+            entering={FadeInDown.duration(400).delay(500).springify().mass(0.6)}
+            style={styles.topSection}>
             <View>
               <Text preset="h1">{forecastData?.location?.name}</Text>
               <Text preset="h3">{forecastData?.location?.country}</Text>
@@ -84,21 +111,26 @@ const HomeScreen = () => {
                 style={{ ...scaled(24) }}
               />
             </TouchableOpacity>
-          </View>
+          </Animated.View>
 
           <View style={styles.weatherRow}>
             {renderWeatherIcon(100)}
-            <View style={styles.weatherInfo}>
-              {weatherData?.main.temp && (
+            <Animated.View
+              key={`${weatherData?.main?.temp}-${weatherData?.weather?.[0]?.description}`}
+              entering={FadeInRight.duration(500)
+                .delay(300)
+                .springify()
+                .mass(0.6)}
+              style={styles.weatherInfo}>
+              {weatherData?.main?.temp && (
                 <Text style={styles.tempText}>
-                  {Math.round(weatherData.main.temp)}
-                  °C
+                  {Math.round(weatherData.main.temp)}°C
                 </Text>
               )}
               <Text preset="h4" style={styles.weatherDesc}>
                 {weatherData?.weather?.[0]?.description.toLocaleUpperCase()}
               </Text>
-            </View>
+            </Animated.View>
           </View>
 
           <View style={styles.forecastContainer}>

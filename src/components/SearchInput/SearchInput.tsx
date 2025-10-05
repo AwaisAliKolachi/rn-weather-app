@@ -146,7 +146,16 @@ const SearchInputStyles = ({
   borderColor,
 }: Palette) =>
   StyleSheet.create({
-    input: {},
+    input: {
+      shadowColor: textColor,
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.2,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
     container: { position: 'relative', margin: 8 },
     dropdown: {
       position: 'absolute',
