@@ -9,13 +9,13 @@ export type BaseLayoutProps = React.PropsWithChildren & {
 };
 
 export const BaseLayout = ({ children, style }: BaseLayoutProps) => {
-  const { appTheme, color } = useColor();
+  const { color, isDark } = useColor();
   const styles = baseLayoutStyles(color);
 
   return (
     <SafeAreaView style={[styles.safeAreaStyle, style]}>
       <StatusBar
-        barStyle={appTheme === 'dark' ? 'light-content' : 'dark-content'}
+        barStyle={isDark ? 'light-content' : 'dark-content'}
         backgroundColor={color.backgroundColor}
       />
       {children}

@@ -1,7 +1,18 @@
 import React from 'react';
-import { FlatList, View, ScrollView, TouchableOpacity } from 'react-native';
+import {
+  FlatList,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native';
 import { Text } from '@app/blueprints';
 import useHome from './useHome';
+import { scaled } from '@src/utils';
+import { weatherIconsMap } from '@src/constants';
+import moment from 'moment';
+import { Icons } from '@src/assets';
+import { ForecastDayItem } from '@src/services';
 import {
   BaseLayout,
   ForecastItem,
@@ -10,16 +21,13 @@ import {
   SearchInput,
   SvgIcon,
 } from '@src/components';
-import { scaled } from '@src/utils';
-import { weatherIconsMap } from '@src/constants';
-import moment from 'moment';
-import { Icons } from '@src/assets';
 
 const HomeScreen = () => {
   const {
     color,
     styles,
     appTheme,
+    isLight,
     toggleTheme,
     weatherData,
     forecastData,
@@ -38,6 +46,10 @@ const HomeScreen = () => {
     return iconName ? <SvgIcon icon={iconName} {...scaled(size)} /> : null;
   };
 
+  const renderForecastItem = ({ item }: { item: ForecastDayItem }) => (
+    <ForecastItem item={item} color={color} />
+  );
+
   return (
     <BaseLayout>
       <HeaderHome
@@ -51,35 +63,31 @@ const HomeScreen = () => {
           disabled={isFetchingLocation || isFetchingWeather}
         />
       </View>
-      {isFetchingLocation || isFetchingWeather ? (
-        <View style={{}}>
-          <Text preset="small">Loading...</Text>
-        </View>
-      ) : null}
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.container}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}>
+          <View style={styles.topSection}>
             <View>
               <Text preset="h1">{forecastData?.location?.name}</Text>
               <Text preset="h3">{forecastData?.location?.country}</Text>
+              <Text preset="h5">
+                🕑{' '}
+                {moment
+                  .unix(weatherData?.dt ?? 0)
+                  .format('hh:mm A, MMM D, YYYY')}
+              </Text>
             </View>
             <TouchableOpacity onPress={onPressFavorite}>
               <Icon
                 icon={
-                  isFavorite()
-                    ? appTheme === 'light'
+                  isFavorite
+                    ? isLight
                       ? Icons.FAV_ACTIVE_DARK_ICONS
                       : Icons.FAV_ACTIVE_LIGHT_ICONS
-                    : appTheme === 'light'
+                    : isLight
                       ? Icons.FAV_INACTIVE_DARK_ICONS
                       : Icons.FAV_INACTIVE_LIGHT_ICONS
                 }
-                style={{ ...scaled(20) }}
+                style={{ ...scaled(24) }}
               />
             </TouchableOpacity>
           </View>
@@ -102,9 +110,7 @@ const HomeScreen = () => {
           <View style={styles.forecastContainer}>
             <FlatList
               data={forecastData?.forecast?.forecastday}
-              renderItem={({ item }) => (
-                <ForecastItem item={item} color={color} />
-              )}
+              renderItem={renderForecastItem}
               keyExtractor={(_, index) => index.toString()}
               showsVerticalScrollIndicator={false}
               scrollEnabled={false}

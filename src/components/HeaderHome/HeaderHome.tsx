@@ -17,7 +17,7 @@ export const HeaderHome: React.FC<HeaderHomeProps> = ({
   title = 'Home',
   toggleTheme,
 }) => {
-  const { color, appTheme } = useColor();
+  const { color, isDark } = useColor();
   const { navigation } = useAppContext();
   const styles = HeaderHomeStyles(color);
   return (
@@ -28,21 +28,13 @@ export const HeaderHome: React.FC<HeaderHomeProps> = ({
       <View style={styles.rightSection}>
         <TouchableOpacity onPress={() => navigation.navigate(Screen.FAVORITES)}>
           <Icon
-            icon={
-              appTheme === 'dark'
-                ? Icons.FAVS_LIGHT_ICONS
-                : Icons.FAVS_DARK_ICONS
-            }
+            icon={isDark ? Icons.FAVS_LIGHT_ICONS : Icons.FAVS_DARK_ICONS}
             style={styles.iconFav}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleTheme}>
           <Icon
-            icon={
-              appTheme === 'dark'
-                ? Icons.LIGHT_MODE_ICONS
-                : Icons.DARK_MODE_ICONS
-            }
+            icon={isDark ? Icons.LIGHT_MODE_ICONS : Icons.DARK_MODE_ICONS}
             style={styles.iconTheme}
           />
         </TouchableOpacity>
@@ -76,6 +68,6 @@ const HeaderHomeStyles = ({ backgroundColor, borderColor }: Palette) =>
       ...scaled(28),
     },
     iconFav: {
-      ...scaled(25),
+      ...scaled(22),
     },
   });

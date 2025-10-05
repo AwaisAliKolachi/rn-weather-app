@@ -10,4 +10,6 @@ export enum Icons {
   FAV_INACTIVE_DARK_ICONS = require('./fav_inactive_dark.png'),
   FAV_INACTIVE_LIGHT_ICONS = require('./fav_inactive_light.png'),
   LIGHT_MODE_ICONS = require('./light_mode.png'),
+  TEMP_MAX_ICONS = require('./temp_max.png'),
+  TEMP_MIN_ICONS = require('./temp_min.png'),
 }

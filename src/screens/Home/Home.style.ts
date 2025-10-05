@@ -12,9 +12,9 @@ export const HomeStyles = ({ backgroundColor }: Palette) =>
     searchWrapper: {
       width: '100%',
     },
-    loaderWrapper: {
-      flex: 1,
-      justifyContent: 'center',
+    topSection: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
       alignItems: 'center',
     },
     weatherRow: {

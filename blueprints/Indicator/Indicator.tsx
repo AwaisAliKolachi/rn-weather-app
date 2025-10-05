@@ -58,13 +58,10 @@ export const IndicatorViewRef = (
     <Pressable onPress={handlePressCount} style={styles.container}>
       <View style={styles.loaderContainer}>
         <ActivityIndicator
-          size={'large'}
+          size={'small'}
           color={color.primaryColor}
           style={styles.loaderStyle}
         />
-        <Text preset="h2" color={color.textColor}>
-          Please wait ...
-        </Text>
       </View>
     </Pressable>
   );
@@ -74,20 +71,20 @@ export const IndicatorView = React.forwardRef<IndicatorRef, IndicatorProps>(
   IndicatorViewRef
 );
 
-export const indicatorStyles = ({ overlay, backgroundColor }: Palette) => {
+export const indicatorStyles = ({ overlay, textColor }: Palette) => {
   const styles = StyleSheet.create({
     container: {
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       backgroundColor: overlay,
       ...StyleSheet.absoluteFillObject,
     },
     loaderContainer: {
       alignItems: 'center',
-      backgroundColor: backgroundColor,
-      borderRadius: scaledSize(7),
+      backgroundColor: textColor,
+      borderRadius: scaledSize(50),
       justifyContent: 'center',
-      padding: scaledSize(10),
+      top: scaledSize(50),
     },
     loaderStyle: {
       padding: scaledSize(7),

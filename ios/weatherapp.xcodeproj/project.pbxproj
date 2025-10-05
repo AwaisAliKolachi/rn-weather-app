@@ -12,6 +12,8 @@
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		AD012B0CAE985EACFCEE8BD9 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 9ED2BB560F2ACE119C9702C2 /* PrivacyInfo.xcprivacy */; };
+		1FE38B61D01849D3A0E03E81 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A3302B438DC84CC1AD11AAE7 /* BootSplash.storyboard */; };
+		CDDAC10110A845DCA62CCCF9 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D6EEA86A1BF54C66898342AF /* Colors.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +38,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = weatherapp/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9ED2BB560F2ACE119C9702C2 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = weatherapp/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		A3302B438DC84CC1AD11AAE7 /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "weatherapp/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D6EEA86A1BF54C66898342AF /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "weatherapp/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +71,8 @@
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
 				9ED2BB560F2ACE119C9702C2 /* PrivacyInfo.xcprivacy */,
+				A3302B438DC84CC1AD11AAE7 /* BootSplash.storyboard */,
+				D6EEA86A1BF54C66898342AF /* Colors.xcassets */,
 			);
 			name = weatherapp;
 			sourceTree = "<group>";
@@ -188,6 +194,8 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				AD012B0CAE985EACFCEE8BD9 /* PrivacyInfo.xcprivacy in Resources */,
+				1FE38B61D01849D3A0E03E81 /* BootSplash.storyboard in Resources */,
+				CDDAC10110A845DCA62CCCF9 /* Colors.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

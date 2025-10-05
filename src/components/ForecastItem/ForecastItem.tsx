@@ -4,6 +4,8 @@ import { Text } from '@app/blueprints';
 import moment from 'moment';
 import { ForecastDayItem } from '@src/services/models';
 import { Palette, scaledSize } from '@src/utils';
+import { Icon } from '../AppIcon/AppIcon';
+import { Icons } from '@src/assets';
 
 interface ForecastItemProps {
   item: ForecastDayItem;
@@ -22,6 +24,7 @@ export const ForecastItem: React.FC<ForecastItemProps> = ({ item, color }) => {
       ]}>
       <View style={styles.forecastDay}>
         <Text preset="h4">{moment(item.date).format('dddd')}</Text>
+        <Text preset="h5">{moment(item.date).format('MMM D')}</Text>
       </View>
 
       <View style={styles.forecastIconWrapper}>
@@ -35,8 +38,14 @@ export const ForecastItem: React.FC<ForecastItemProps> = ({ item, color }) => {
       </View>
 
       <View style={styles.forecastTemp}>
-        <Text preset="h5">{item.day.maxtemp_c} °C</Text>
-        <Text preset="h5">{item.day.mintemp_c} °C</Text>
+        <View style={styles.forecastTempRow}>
+          <Icon icon={Icons.TEMP_MAX_ICONS} style={styles.forecastTempIcon} />
+          <Text preset="h5">{item.day.maxtemp_c.toFixed(1)} °C</Text>
+        </View>
+        <View style={styles.forecastTempRow}>
+          <Icon icon={Icons.TEMP_MIN_ICONS} style={styles.forecastTempIcon} />
+          <Text preset="h5">{item.day.mintemp_c.toFixed(1)} °C</Text>
+        </View>
       </View>
     </View>
   );
@@ -70,8 +79,19 @@ const ForecastItemStyles = ({}: Palette) =>
       height: scaledSize(30),
     },
     forecastTemp: {
-      alignItems: 'flex-end',
+      alignItems: 'flex-start',
       flex: 1,
       gap: 10,
+    },
+    forecastTempRow: {
+      width: '100%',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+      gap: 6,
+    },
+    forecastTempIcon: {
+      width: scaledSize(8),
+      height: scaledSize(8),
     },
   });

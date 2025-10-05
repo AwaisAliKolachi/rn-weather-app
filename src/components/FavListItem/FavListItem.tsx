@@ -20,9 +20,15 @@ export const FavListItem: React.FC<FavListItemProps> = ({
   onPressDelete,
 }) => {
   const styles = FavListItemStyles(color);
+  const onPressItem = () => {
+    onPress(item);
+  };
+  const onDeletePress = () => {
+    onPressDelete(item);
+  };
   return (
     <TouchableOpacity
-      onPress={() => onPress(item)}
+      onPress={onPressItem}
       style={[
         styles.favItem,
         {
@@ -34,9 +40,7 @@ export const FavListItem: React.FC<FavListItemProps> = ({
         <Text preset="h5">{item.country}</Text>
       </View>
 
-      <TouchableOpacity
-        onPress={() => onPressDelete(item)}
-        style={styles.deleteContainer}>
+      <TouchableOpacity onPress={onDeletePress} style={styles.deleteContainer}>
         <Icon icon={Icons.DELETE_ICONS} style={styles.iconDelete} />
       </TouchableOpacity>
     </TouchableOpacity>
@@ -67,7 +71,7 @@ const FavListItemStyles = ({}: Palette) =>
       marginRight: 10,
     },
     iconDelete: {
-      width: scaledSize(24),
-      height: scaledSize(24),
+      width: scaledSize(18),
+      height: scaledSize(18),
     },
   });

@@ -30,6 +30,7 @@
     "moment": "^2.30.1",
     "react": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-bootsplash": "^6.3.11",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "^2.21.1",
     "react-native-get-location": "^6.0.0",

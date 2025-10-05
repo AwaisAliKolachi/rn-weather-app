@@ -5,20 +5,26 @@ import {
   WeatherResult,
   ForecastResult,
   WeatherUnits,
-  WeatherParams,
-  ForecastParams,
   SearchResult,
 } from '@src/services/models';
 import { AppConfig, StorageKeys } from '@src/constants';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { Location } from 'react-native-get-location';
 import { FavsItem } from '../Favorites/types';
 import { useRoute } from '@react-navigation/native';
 import { HomeRoute } from '../../navigation/appNavigation.type';
 
 const useHome = () => {
-  const { color, navigation, appTheme, setAppTheme, services, storage } =
-    useAppContext();
+  const {
+    color,
+    navigation,
+    appTheme,
+    setAppTheme,
+    services,
+    storage,
+    isLight,
+    loader,
+  } = useAppContext();
   const route = useRoute<HomeRoute>();
   const routeLocation = route?.params?.location;
   const {
@@ -34,66 +40,61 @@ const useHome = () => {
   const [favoritesData, setFavoritesData] = useState<FavsItem[]>([]);
   const [isFetchingWeather, setIsFetchingWeather] = useState<boolean>(false);
 
-  const toggleTheme = () => {
-    setAppTheme(appTheme === 'light' ? 'dark' : 'light');
-  };
+  const toggleTheme = useCallback(() => {
+    setAppTheme(isLight ? 'dark' : 'light');
+  }, [isLight, setAppTheme]);
 
-  const loadCachedData = async () => {
-    const cachedWeather = await storage.getData(StorageKeys.WEATHER_CACHE);
-    const cachedForecast = await storage.getData(StorageKeys.FORECAST_CACHE);
-    const cachedFavorites = await storage.getData(StorageKeys.FAVORITES);
+  const loadCachedData = useCallback(async () => {
+    const [cachedWeather, cachedForecast, cachedFavorites] = await Promise.all([
+      storage.getData(StorageKeys.WEATHER_CACHE),
+      storage.getData(StorageKeys.FORECAST_CACHE),
+      storage.getData(StorageKeys.FAVORITES),
+    ]);
 
     if (cachedWeather) setWeatherData(cachedWeather);
     if (cachedForecast) setForecastData(cachedForecast);
     if (cachedFavorites) setFavoritesData(cachedFavorites);
-  };
+  }, [storage]);
 
-  const fetchAllWeatherData = async (currentLocation: Location) => {
-    if (!currentLocation?.latitude || !currentLocation?.longitude) return;
+  const fetchAllWeatherData = useCallback(
+    async (currentLocation: Location) => {
+      if (!currentLocation?.latitude || !currentLocation?.longitude) return;
 
-    setIsFetchingWeather(true);
+      setIsFetchingWeather(true);
 
-    const commonParams: WeatherParams = {
-      lat: currentLocation.latitude,
-      lon: currentLocation.longitude,
-      units: WeatherUnits.METRIC,
-      appId: AppConfig.OPEN_WEATHER_API_KEY,
-    };
-    const forecastParams: ForecastParams = {
-      q: `${currentLocation.latitude},${currentLocation.longitude}`,
-      days: 8,
-      aqi: 'no',
-      alerts: 'no',
-      key: AppConfig.WEATHER_API_KEY,
-    };
+      const [weatherRes, forecastRes] = await Promise.allSettled([
+        services.getWeather({
+          lat: currentLocation.latitude,
+          lon: currentLocation.longitude,
+          units: WeatherUnits.METRIC,
+          appId: AppConfig.OPEN_WEATHER_API_KEY,
+        }),
+        services.getForecast({
+          q: `${currentLocation.latitude},${currentLocation.longitude}`,
+          days: 8,
+          aqi: 'no',
+          alerts: 'no',
+          key: AppConfig.WEATHER_API_KEY,
+        }),
+      ]);
 
-    const weatherPromise = services
-      .getWeather(commonParams)
-      .then(async res => {
-        setWeatherData(res);
-        await storage.setData(StorageKeys.WEATHER_CACHE, res);
-      })
-      .catch(err => {
-        console.error('Current Weather Fetch Error:', err);
-      });
+      if (weatherRes.status === 'fulfilled') {
+        setWeatherData(weatherRes.value);
+        storage.setData(StorageKeys.WEATHER_CACHE, weatherRes.value);
+      }
 
-    const forecastPromise = services
-      .getForecast(forecastParams)
-      .then(async res => {
-        if (res?.forecast?.forecastday?.length) {
-          res.forecast.forecastday = res.forecast.forecastday.slice(1); // omit 0 index bcz same day
-        }
+      if (forecastRes.status === 'fulfilled') {
+        const res = forecastRes.value;
+        if (res?.forecast?.forecastday?.length)
+          res.forecast.forecastday = res.forecast.forecastday.slice(1); // Remove 0 index, cuz its same day
         setForecastData(res);
-        await storage.setData(StorageKeys.FORECAST_CACHE, res);
-      })
-      .catch(err => {
-        console.error('Forecast Fetch Error:', err);
-      });
+        storage.setData(StorageKeys.FORECAST_CACHE, res);
+      }
 
-    Promise.allSettled([weatherPromise, forecastPromise]).finally(() => {
       setIsFetchingWeather(false);
-    });
-  };
+    },
+    [services]
+  );
 
   useEffect(() => {
     loadCachedData();
@@ -105,26 +106,36 @@ const useHome = () => {
     }
   }, [location, services]);
 
-  const onSearchSelect = (city: SearchResult) => {
-    navigation.setParams({ location: undefined });
-    const params = {
-      latitude: city.lat,
-      longitude: city.lon,
-    };
-    setLocation(params as Location);
-  };
+  useEffect(() => {
+    if (isFetchingLocation || isFetchingWeather) {
+      loader.current?.show();
+    } else {
+      loader.current?.hide();
+    }
+  }, [isFetchingLocation, isFetchingWeather]);
 
-  const isFavorite = () => {
+  const onSearchSelect = useCallback(
+    (city: SearchResult) => {
+      navigation.setParams({ location: undefined });
+      const params = {
+        latitude: city.lat,
+        longitude: city.lon,
+      };
+      setLocation(params as Location);
+    },
+    [navigation, setLocation]
+  );
+
+  const isFavorite = useMemo(() => {
     if (!location) return false;
-
     return favoritesData.some(
       fav =>
         fav.latitude === location.latitude &&
         fav.longitude === location.longitude
     );
-  };
+  }, [favoritesData, location]);
 
-  const onPressFavorite = async () => {
+  const onPressFavorite = useCallback(async () => {
     if (!location || !forecastData?.location?.name) return;
 
     const payload: FavsItem = {
@@ -139,26 +150,24 @@ const useHome = () => {
         fav.latitude === payload.latitude && fav.longitude === payload.longitude
     );
 
-    let updatedFavorites: FavsItem[];
-    if (exists) {
-      updatedFavorites = favoritesData.filter(
-        fav =>
-          fav.latitude !== payload.latitude ||
-          fav.longitude !== payload.longitude
-      );
-    } else {
-      updatedFavorites = [...favoritesData, payload];
-    }
+    const updatedFavorites = exists
+      ? favoritesData.filter(
+          fav =>
+            fav.latitude !== payload.latitude ||
+            fav.longitude !== payload.longitude
+        )
+      : [...favoritesData, payload];
 
     setFavoritesData(updatedFavorites);
     await storage.setData(StorageKeys.FAVORITES, updatedFavorites);
-  };
+  }, [favoritesData, forecastData, location, storage]);
 
   return {
     color,
     navigation,
     styles: HomeStyles(color),
     appTheme,
+    isLight,
     toggleTheme,
     location,
     isFetchingLocation,

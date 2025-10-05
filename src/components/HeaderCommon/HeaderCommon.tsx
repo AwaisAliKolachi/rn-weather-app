@@ -22,7 +22,7 @@ export const HeaderCommon = React.memo(
     headerRightComponent,
     onPressRight,
   }: HeaderCommonProps) => {
-    const { navigation, appTheme } = useAppContext();
+    const { navigation, isDark } = useAppContext();
     const { color } = useColor();
     const styles = HeaderCommonStyles(color);
 
@@ -34,11 +34,7 @@ export const HeaderCommon = React.memo(
             onPress={onPressBack ? onPressBack : () => navigation?.goBack()}
             hitSlop={{ top: 30, bottom: 30, left: 30, right: 30 }}>
             <Icon
-              icon={
-                appTheme === 'dark'
-                  ? Icons.BACK_LIGHT_ICONS
-                  : Icons.BACK_DARK_ICONS
-              }
+              icon={isDark ? Icons.BACK_LIGHT_ICONS : Icons.BACK_DARK_ICONS}
               style={styles.backIcon}
             />
           </TouchableOpacity>

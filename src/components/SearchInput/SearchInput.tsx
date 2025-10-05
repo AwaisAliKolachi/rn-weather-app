@@ -3,7 +3,7 @@ import { AppConfig } from '@src/constants';
 import { useAppContext } from '@src/context';
 import { useDebounce } from '@src/hooks';
 import { Palette, scaled } from '@src/utils';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   FlatList,
@@ -36,7 +36,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
   placeholder = 'Search...',
   disabled,
 }) => {
-  const { services, appTheme, color } = useAppContext();
+  const { services, color, isLight } = useAppContext();
   const styles = SearchInputStyles(color);
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
@@ -68,13 +68,15 @@ export const SearchInput: React.FC<SearchInputProps> = ({
     fetchData();
   }, [debouncedQuery]);
 
-  const handleSelect = (item: SearchResult) => {
-    setQuery('');
-    setVisible(false);
-    Keyboard.dismiss();
-    onSelect(item);
-  };
-
+  const handleSelect = useCallback(
+    (item: SearchResult) => {
+      setQuery('');
+      setVisible(false);
+      Keyboard.dismiss();
+      onSelect(item);
+    },
+    [onSelect]
+  );
   return (
     <View style={styles.container} ref={containerRef}>
       <Input
@@ -92,11 +94,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
         backgroundColor={color.textFieldBg}
         leftIcon={
           <SvgIcon
-            icon={
-              appTheme === 'light'
-                ? SVGIcons.SEARCH_LIGHT
-                : SVGIcons.SEARCH_DARK
-            }
+            icon={isLight ? SVGIcons.SEARCH_LIGHT : SVGIcons.SEARCH_DARK}
             {...scaled(24)}
           />
         }
@@ -107,11 +105,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({
               style={styles.crossIcon}
               hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
               <SvgIcon
-                icon={
-                  appTheme === 'light'
-                    ? SVGIcons.CROSS_LIGHT
-                    : SVGIcons.CROSS_DARK
-                }
+                icon={isLight ? SVGIcons.CROSS_LIGHT : SVGIcons.CROSS_DARK}
                 {...scaled(12)}
               />
             </TouchableOpacity>

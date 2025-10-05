@@ -15,6 +15,8 @@ export interface AppThemeContextType {
   appTheme: Theme;
   setAppTheme: (theme: Theme) => void;
   color: Palette;
+  isDark: boolean;
+  isLight: boolean;
 }
 
 export const AppThemeContext = createContext<AppThemeContextType | undefined>(
@@ -42,6 +44,8 @@ export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
       appTheme,
       color: color[appTheme || 'light'],
       setAppTheme,
+      isDark: appTheme === 'dark',
+      isLight: appTheme === 'light',
     };
   }, [appTheme, setAppTheme]);
 
