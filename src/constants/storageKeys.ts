@@ -1,0 +1,9 @@
+export enum StorageKeys {
+  APP_THEME = 'APP_THEME',
+  FIRST_LAUNCH = 'FIRST_LAUNCH',
+  WEATHER_CACHE = 'WEATHER_CACHE',
+  FORECAST_CACHE = 'FORECAST_CACHE',
+  FAVORITES = 'FAVORITES',
+}
+
+export type STORAGES_KEY = StorageKeys;
